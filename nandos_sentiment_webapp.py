@@ -7,32 +7,49 @@ import plotly.graph_objects as go
 app = dash.Dash(__name__)
 app.title = "Nando's SG Social Intelligence Dashboard"
 
-# --- Sample Simulated Data ---
+# --- Updated Data with Google Reviews ---
 data = pd.DataFrame({
-    "Month": ["Feb", "Feb", "Feb", "Mar", "Mar", "Mar", "Apr", "Apr", "Apr", "May", "May", "May"] * 2,
-    "Platform": ["TikTok", "Instagram", "Reddit"] * 8,
-    "Sentiment": ["Positive", "Neutral", "Negative"] * 8,
-    "Mentions": [60, 30, 10, 80, 20, 15, 70, 25, 20, 90, 15, 10,
-                 40, 50, 20, 50, 30, 10, 60, 20, 15, 75, 20, 5]
-})
-
-# Top themes (simulated)
-top_themes = pd.DataFrame({
-    "Theme": ["Service issues", "Dry chicken", "Quick Lunch Meal Campaign", "Spicy not spicy", "Pricing and value perception"],
-    "Mentions": [45, 30, 50, 25, 35],
-    "Sentiment": ["Negative", "Negative", "Positive", "Neutral", "Negative"]
-})
-
-# Top quotes (dummy)
-top_quotes = pd.DataFrame({
-    "Platform": ["Reddit", "Instagram", "TikTok"],
-    "Quote": [
-        "I wish SG Nando's tasted more like the one in KL…",
-        "Friend-zone your chicken is hilarious 🤣",
-        "Honestly? Best spice kick in town."
+    "Month": ["Feb", "Feb", "Feb", "Mar", "Mar", "Mar", "Apr", "Apr", "Apr", "May", "May", "May"] * 2 + ["May"] * 6,
+    "Platform": ["TikTok", "Instagram", "Reddit"] * 8 + ["Google Reviews"] * 6,
+    "Sentiment": [
+        "Positive", "Neutral", "Negative", "Positive", "Neutral", "Negative",
+        "Positive", "Neutral", "Negative", "Positive", "Neutral", "Negative",
+        "Positive", "Positive", "Negative", "Neutral", "Negative", "Positive"
     ],
-    "Sentiment": ["Negative", "Positive", "Positive"],
-    "Campaign": ["N/A", "Quick Lunch Meal", "People’s Griller"]
+    "Mentions": [
+        60, 30, 10, 80, 20, 15, 70, 25, 20, 90, 15, 10,
+        40, 50, 20, 50, 30, 10, 6, 6, 6, 6, 6, 6
+    ]
+})
+
+# Top themes (including Google Reviews)
+top_themes = pd.DataFrame({
+    "Theme": [
+        "Service issues", "Dry chicken", "Quick Lunch Meal Campaign",
+        "Spicy not spicy", "Pricing and value perception",
+        "Queue times", "Inconsistent portions", "Grill quality", "Staff attentiveness"
+    ],
+    "Mentions": [45, 30, 50, 25, 35, 20, 15, 18, 22],
+    "Sentiment": [
+        "Negative", "Negative", "Positive", "Neutral", "Negative",
+        "Neutral", "Negative", "Positive", "Positive"
+    ]
+})
+
+# Top quotes including Google Reviews
+# Note: These are paraphrased and shortened for clarity
+
+top_quotes = pd.DataFrame({
+    "Platform": ["Reddit", "Instagram", "TikTok", "Google Reviews", "Google Reviews"],
+    "Quote": [
+        "The SG outlet doesn’t taste like KL’s version…",
+        "Friend-zone your chicken is hilarious 🤣",
+        "Best spice kick in town.",
+        "Chicken juicy but sour, not smoky like AU.",
+        "Queued 10 min, card-only payment, good food though."
+    ],
+    "Sentiment": ["Negative", "Positive", "Positive", "Neutral", "Positive"],
+    "Campaign": ["N/A", "Quick Lunch Meal", "People’s Griller", "N/A", "N/A"]
 })
 
 # --- Layout ---
@@ -56,7 +73,7 @@ app.layout = html.Div([
         html.Label("Select Platform(s):", style={"fontWeight": "bold"}),
         dcc.Dropdown(
             options=[{"label": p, "value": p} for p in data["Platform"].unique()],
-            value=["TikTok", "Instagram", "Reddit"],
+            value=data["Platform"].unique().tolist(),
             multi=True,
             id="platform-selector"
         )

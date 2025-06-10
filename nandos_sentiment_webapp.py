@@ -9,16 +9,8 @@ app.title = "Nando's SG Social Intelligence Dashboard"
 
 # --- Updated Data with Google Reviews ---
 data = pd.DataFrame({
-    "Month": [
-        "Feb", "Feb", "Feb", "Mar", "Mar", "Mar", "Apr", "Apr", "Apr", "May", "May", "May",
-        "May", "May", "May", "May", "May", "May"
-    ],
-    "Platform": [
-        "TikTok", "Instagram", "Reddit", "TikTok", "Instagram", "Reddit",
-        "TikTok", "Instagram", "Reddit", "TikTok", "Instagram", "Reddit",
-        "Google Reviews", "Google Reviews", "Google Reviews",
-        "Google Reviews", "Google Reviews", "Google Reviews"
-    ],
+    "Month": ["Feb", "Feb", "Feb", "Mar", "Mar", "Mar", "Apr", "Apr", "Apr", "May", "May", "May"] * 2 + ["May"] * 6,
+    "Platform": ["TikTok", "Instagram", "Reddit"] * 8 + ["Google Reviews"] * 6,
     "Sentiment": [
         "Positive", "Neutral", "Negative", "Positive", "Neutral", "Negative",
         "Positive", "Neutral", "Negative", "Positive", "Neutral", "Negative",
@@ -26,7 +18,7 @@ data = pd.DataFrame({
     ],
     "Mentions": [
         60, 30, 10, 80, 20, 15, 70, 25, 20, 90, 15, 10,
-        6, 6, 6, 6, 6, 6
+        40, 50, 20, 50, 30, 10, 6, 6, 6, 6, 6, 6
     ]
 })
 
@@ -44,20 +36,27 @@ top_themes = pd.DataFrame({
     ]
 })
 
-# Top quotes including Google Reviews
-# Note: These are paraphrased and shortened for clarity
-
+# Top social quotes (Updated with local quotes, removed TikTok quote)
 top_quotes = pd.DataFrame({
-    "Platform": ["Reddit", "Instagram", "TikTok", "Google Reviews", "Google Reviews"],
+    "Platform": [
+        "Reddit", "Tripadvisor", "Yelp", "Google Reviews", "Google Reviews"
+    ],
     "Quote": [
-        "The SG outlet doesn’t taste like KL’s version…",
-        "Friend-zone your chicken is hilarious 🤣",
-        "Best spice kick in town.",
-        "Chicken juicy but sour, not smoky like AU.",
+        "I’ve only ate it once… the portion was quite small compared to the price.",
+        "Food is ok. Chicken was moist and not over cooked. Service was lousy. Slow and inattentive.",
+        "Food is ok… Chicken moist but service was lousy. Slow and inattentive.",
+        "Exceptional service by Essa at Nando’s Jurong Point! He went above and beyond to recover a lost item.",
         "Queued 10 min, card-only payment, good food though."
     ],
-    "Sentiment": ["Negative", "Positive", "Positive", "Neutral", "Positive"],
-    "Campaign": ["N/A", "Quick Lunch Meal", "People’s Griller", "N/A", "N/A"]
+    "Sentiment": [
+        "Negative", "Negative", "Negative", "Positive", "Positive"
+    ],
+    "Theme": [
+        "Portion & Value", "Service Experience", "Service Experience", "Service Experience", "Service Experience"
+    ],
+    "Campaign": [
+        "N/A", "N/A", "N/A", "N/A", "N/A"
+    ]
 })
 
 # --- Layout ---
@@ -109,8 +108,8 @@ app.layout = html.Div([
             html.Tr([
                 html.Td(
                     html.Span(top_quotes.iloc[i]["Quote"],
-                              title=f"Source: {top_quotes.iloc[i]['Platform']} | Campaign: {top_quotes.iloc[i]['Campaign']}"),
-                    style={"padding": "8px", "border": "1px solid #ccc"}
+                              title=f"Source: {top_quotes.iloc[i]['Platform']} | Theme: {top_quotes.iloc[i]['Theme']}",
+                              style={"padding": "8px", "border": "1px solid #ccc"})
                 ),
                 html.Td(top_quotes.iloc[i]["Sentiment"], style={"padding": "8px", "border": "1px solid #ccc"})
             ]) for i in range(len(top_quotes))

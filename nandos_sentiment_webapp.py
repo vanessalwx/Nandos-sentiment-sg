@@ -18,7 +18,7 @@ data = pd.DataFrame({
 
 # Top themes (simulated)
 top_themes = pd.DataFrame({
-    "Theme": ["Service issues", "Dry chicken", "Great campaigns", "Spicy not spicy", "Sauce missing"],
+    "Theme": ["Service issues", "Dry chicken", "Quick Lunch Meal Campaign", "Spicy not spicy", "Pricing and value perception"],
     "Mentions": [45, 30, 50, 25, 35],
     "Sentiment": ["Negative", "Negative", "Positive", "Neutral", "Negative"]
 })
@@ -31,18 +31,17 @@ top_quotes = pd.DataFrame({
         "Friend-zone your chicken is hilarious 🤣",
         "Honestly? Best spice kick in town."
     ],
-    "Sentiment": ["Negative", "Positive", "Positive"]
+    "Sentiment": ["Negative", "Positive", "Positive"],
+    "Campaign": ["N/A", "Quick Lunch Meal", "People’s Griller"]
 })
 
 # --- Layout ---
 app.layout = html.Div([
     html.Div([
-    html.Img(src='/assets/nandos_logo.png', style={
-        'height': '80px',
-        'margin': '0 auto',
-        'display': 'block'
-    })
-]),
+        html.Img(src='/assets/nandos_logo.png', style={
+            'height': '80px', 'margin': '0 auto', 'display': 'block'})
+    ]),
+
     html.H1("Nando’s SG Social Intelligence Dashboard", style={"textAlign": "center", "color": "#d71f26"}),
 
     html.Div([
@@ -79,12 +78,16 @@ app.layout = html.Div([
     html.H2("Top Social Quotes", style={"color": "#d71f26"}),
     html.Table([
         html.Thead([
-            html.Tr([html.Th(col, style={"backgroundColor": "#d71f26", "color": "white"}) for col in top_quotes.columns])
+            html.Tr([html.Th(col, style={"backgroundColor": "#d71f26", "color": "white"}) for col in ["Quote", "Sentiment"]])
         ]),
         html.Tbody([
             html.Tr([
-                html.Td(top_quotes.iloc[i][col], style={"padding": "8px", "border": "1px solid #ccc"})
-                for col in top_quotes.columns
+                html.Td(
+                    html.Span(top_quotes.iloc[i]["Quote"],
+                              title=f"Source: {top_quotes.iloc[i]['Platform']} | Campaign: {top_quotes.iloc[i]['Campaign']}"),
+                    style={"padding": "8px", "border": "1px solid #ccc"}
+                ),
+                html.Td(top_quotes.iloc[i]["Sentiment"], style={"padding": "8px", "border": "1px solid #ccc"})
             ]) for i in range(len(top_quotes))
         ])
     ], style={"width": "80%", "margin": "auto", "border": "1px solid #ccc", "borderCollapse": "collapse", "backgroundColor": "#fff"})

@@ -1,4 +1,4 @@
-import pandas as pd
+56import pandas as pd
 import plotly.express as px
 import dash
 from dash import dcc, html, Input, Output
@@ -36,26 +36,22 @@ top_themes = pd.DataFrame({
     ]
 })
 
-# Top social quotes (Updated with local quotes, removed TikTok quote)
 top_quotes = pd.DataFrame({
     "Platform": [
-        "Reddit", "Tripadvisor", "Yelp", "Google Reviews", "Google Reviews"
+        "Instagram", "Facebook", "Google Reviews", "Reddit", "X (Twitter)"
     ],
     "Quote": [
-        "I’ve only ate it once… the portion was quite small compared to the price.",
-        "Food is ok. Chicken was moist and not over cooked. Service was lousy. Slow and inattentive.",
-        "Food is ok… Chicken moist but service was lousy. Slow and inattentive.",
-        "Exceptional service by Essa at Nando’s Jurong Point! He went above and beyond to recover a lost item.",
-        "Queued 10 min, card-only payment, good food though."
+        "Quick lunch meals are such a smart campaign. Got my chicken cheque today!",
+        "Chicken was juicy and the staff checked on us twice — love the service!",
+        "Exceptional service by Essa at Nando’s Jurong Point! Found my retainer in the trash. Hero.",
+        "Bit overpriced for what they’re offering. Portion size just not worth it.",
+        "Nando’s Singapore is my go-to post-gym meal. The pita combos slap."
     ],
     "Sentiment": [
-        "Negative", "Negative", "Negative", "Positive", "Positive"
-    ],
-    "Theme": [
-        "Portion & Value", "Service Experience", "Service Experience", "Service Experience", "Service Experience"
+        "Positive", "Positive", "Positive", "Negative", "Positive"
     ],
     "Campaign": [
-        "N/A", "N/A", "N/A", "N/A", "N/A"
+        "Quick Lunch Meal", "N/A", "N/A", "N/A", "People's Griller"
     ]
 })
 

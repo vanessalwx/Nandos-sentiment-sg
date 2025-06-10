@@ -18,7 +18,6 @@ data = pd.DataFrame({
         "Mar", "Mar", "Mar",
         "Apr", "Apr", "Apr",
         "May", "May", "May",
-        "May", "May", "May", "May", "May", "May"
     ],
     "Platform": [
         "TikTok", "Instagram", "Reddit",
@@ -29,7 +28,6 @@ data = pd.DataFrame({
         "TikTok", "Instagram", "Reddit",
         "TikTok", "Instagram", "Reddit",
         "Google Reviews", "Google Reviews", "Google Reviews",
-        "Google Reviews", "Google Reviews", "Google Reviews"
     ],
     "Sentiment": [
         "Positive", "Neutral", "Negative",
@@ -39,18 +37,19 @@ data = pd.DataFrame({
         "Positive", "Neutral", "Negative",
         "Positive", "Neutral", "Negative",
         "Positive", "Neutral", "Negative",
-        "Positive", "Positive", "Negative", "Neutral", "Negative", "Positive"
+        "Positive", "Positive", "Negative"
     ],
     "Mentions": [
-        60, 30, 10,
-        80, 20, 15,
-        70, 25, 20,
-        90, 15, 10,
-        40, 50, 20,
-        50, 30, 10,
-        6, 6, 6,
-        6, 6, 6
-    ]
+    60, 30, 10,
+    80, 20, 15,
+    70, 25, 20,
+    90, 15, 10,
+    40, 50, 20,
+    50, 30, 10,
+    6, 6, 6,
+    6, 6, 6
+]
+
 })
 
 # Top social quotes (cleaned, aligned, and current)

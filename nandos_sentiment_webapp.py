@@ -7,71 +7,59 @@ import plotly.graph_objects as go
 app = dash.Dash(__name__)
 app.title = "Nando's SG Social Intelligence Dashboard"
 
-# --- Fixed Length Data ---
+# --- Updated Data with Google Reviews ---
 data = pd.DataFrame({
-    "Month": [
-        "Feb", "Feb", "Feb",
-        "Mar", "Mar", "Mar",
-        "Apr", "Apr", "Apr",
-        "May", "May", "May",
-        "Feb", "Feb", "Feb",
-        "Mar", "Mar", "Mar",
-        "Apr", "Apr", "Apr",
-        "May", "May", "May",
-    ],
-    "Platform": [
-        "TikTok", "Instagram", "Reddit",
-        "TikTok", "Instagram", "Reddit",
-        "TikTok", "Instagram", "Reddit",
-        "TikTok", "Instagram", "Reddit",
-        "TikTok", "Instagram", "Reddit",
-        "TikTok", "Instagram", "Reddit",
-        "TikTok", "Instagram", "Reddit",
-        "Google Reviews", "Google Reviews", "Google Reviews",
-    ],
+    "Month": ["Feb", "Feb", "Feb", "Mar", "Mar", "Mar", "Apr", "Apr", "Apr", "May", "May", "May"] * 2 + ["May"] * 6,
+    "Platform": ["TikTok", "Instagram", "Reddit"] * 8 + ["Google Reviews"] * 6,
     "Sentiment": [
-        "Positive", "Neutral", "Negative",
-        "Positive", "Neutral", "Negative",
-        "Positive", "Neutral", "Negative",
-        "Positive", "Neutral", "Negative",
-        "Positive", "Neutral", "Negative",
-        "Positive", "Neutral", "Negative",
-        "Positive", "Neutral", "Negative",
-        "Positive", "Positive", "Negative"
+        "Positive", "Neutral", "Negative", "Positive", "Neutral", "Negative",
+        "Positive", "Neutral", "Negative", "Positive", "Neutral", "Negative",
+        "Positive", "Positive", "Negative", "Neutral", "Negative", "Positive"
     ],
     "Mentions": [
-    60, 30, 10,
-    80, 20, 15,
-    70, 25, 20,
-    90, 15, 10,
-    40, 50, 20,
-    50, 30, 10,
-    6, 6, 6,
-    6, 6, 6
-]
-
+        60, 30, 10, 80, 20, 15, 70, 25, 20, 90, 15, 10,
+        40, 50, 20, 50, 30, 10, 6, 6, 6, 6, 6, 6
+    ]
 })
 
-# Top social quotes (cleaned, aligned, and current)
+# Top themes (re-included)
+top_themes = pd.DataFrame({
+    "Theme": [
+        "Service issues", "Dry chicken", "Quick Lunch Meal Campaign",
+        "Spicy not spicy", "Pricing and value perception",
+        "Queue times", "Inconsistent portions", "Grill quality", "Staff attentiveness"
+    ],
+    "Mentions": [45, 30, 50, 25, 35, 20, 15, 18, 22],
+    "Sentiment": [
+        "Negative", "Negative", "Positive", "Neutral", "Negative",
+        "Neutral", "Negative", "Positive", "Positive"
+    ]
+})
+
+# Top quotes (Google + Social)
 top_quotes = pd.DataFrame({
     "Platform": [
-        "Instagram", "Facebook", "Google Reviews", "Reddit", "X (Twitter)"
+        "Instagram", "Reddit", "Facebook", "Google Reviews", "Google Reviews",
+        "Google Reviews", "Google Reviews", "Twitter", "Google Reviews"
     ],
     "Quote": [
-        "Quick lunch meals are such a smart campaign. Got my chicken cheque today!",
-        "Chicken was juicy and the staff checked on us twice — love the service!",
-        "Exceptional service by Essa at Nando’s Jurong Point! Found my retainer in the trash. Hero.",
-        "Bit overpriced for what they’re offering. Portion size just not worth it.",
-        "Nando’s Singapore is my go-to post-gym meal. The pita combos slap."
+        "Friend-zone challenge was a great laugh during lunch!",
+        "Wish the portions were bigger for the price we pay.",
+        "The spice level is perfect but the meat can be dry sometimes.",
+        "Chicken juicy but sour, not really smoky.",
+        "Queued 10 min, card-only payment, good food though.",
+        "The manager helped me retrieve something from the bin — amazing!",
+        "The chicken is ever great. The team checked on us twice during meal.",
+        "Nando’s is my go-to post gym meal. Reliable and tasty.",
+        "Some dishes are great but a $20 lunch needs to feel like $20."
     ],
     "Sentiment": [
-        "Positive", "Positive", "Positive", "Negative", "Positive"
+        "Positive", "Negative", "Neutral", "Neutral", "Positive",
+        "Positive", "Positive", "Positive", "Negative"
     ],
     "Campaign": [
-        "Quick Lunch Meal", "N/A", "N/A", "N/A", "People's Griller"
-    ],
-    "Theme": [
-        "Campaign Engagement", "Service Experience", "Service Experience", "Portion & Value", "Post-Meal Preference"
+        "Quick Lunch Meal", "N/A", "N/A", "N/A", "N/A",
+        "N/A", "N/A", "People’s Griller", "N/A"
     ]
 })
 
@@ -108,6 +96,13 @@ app.layout = html.Div([
     html.H2("Sentiment Breakdown by Platform", style={"color": "#d71f26"}),
     dcc.Graph(id="sentiment-platform-bar"),
 
+    html.H2("Top Discussed Themes", style={"color": "#d71f26"}),
+    dcc.Graph(
+        figure=px.bar(top_themes, x="Mentions", y="Theme", color="Sentiment", orientation="h",
+                     color_discrete_map={"Positive": "#d71f26", "Neutral": "#333333", "Negative": "#999999"},
+                     title="Top Themes by Mentions")
+    ),
+
     html.H2("Top Social Quotes", style={"color": "#d71f26"}),
     html.Table([
         html.Thead([
@@ -117,8 +112,8 @@ app.layout = html.Div([
             html.Tr([
                 html.Td(
                     html.Span(top_quotes.iloc[i]["Quote"],
-                              title=f"Source: {top_quotes.iloc[i]['Platform']} | Theme: {top_quotes.iloc[i]['Theme']}",
-                              style={"padding": "8px", "border": "1px solid #ccc"})
+                              title=f"Source: {top_quotes.iloc[i]['Platform']} | Campaign: {top_quotes.iloc[i]['Campaign']}"),
+                    style={"padding": "8px", "border": "1px solid #ccc"}
                 ),
                 html.Td(top_quotes.iloc[i]["Sentiment"], style={"padding": "8px", "border": "1px solid #ccc"})
             ]) for i in range(len(top_quotes))

@@ -36,48 +36,59 @@ top_quotes = pd.DataFrame({
 
 # --- Layout ---
 app.layout = html.Div([
-    html.H1("Nando’s SG Social Intelligence Dashboard", style={"textAlign": "center"}),
+    html.Div([
+    html.Img(src='/assets/nandos_logo.png', style={
+        'height': '80px',
+        'margin': '0 auto',
+        'display': 'block'
+    })
+]),
+    html.H1("Nando’s SG Social Intelligence Dashboard", style={"textAlign": "center", "color": "#d71f26"}),
 
     html.Div([
-        html.Label("Select Month(s):"),
+        html.Label("Select Month(s):", style={"fontWeight": "bold"}),
         dcc.Dropdown(
             options=[{"label": m, "value": m} for m in data["Month"].unique()],
             value=["Feb", "Mar", "Apr", "May"],
             multi=True,
             id="month-selector"
         ),
-        html.Label("Select Platform(s):"),
+        html.Br(),
+        html.Label("Select Platform(s):", style={"fontWeight": "bold"}),
         dcc.Dropdown(
             options=[{"label": p, "value": p} for p in data["Platform"].unique()],
             value=["TikTok", "Instagram", "Reddit"],
             multi=True,
             id="platform-selector"
         )
-    ], style={"width": "60%", "margin": "auto"}),
+    ], style={"width": "60%", "margin": "auto", "backgroundColor": "#f9f9f9", "padding": "20px", "borderRadius": "10px"}),
 
-    html.H2("Mentions Over Time by Sentiment"),
+    html.H2("Mentions Over Time by Sentiment", style={"color": "#d71f26"}),
     dcc.Graph(id="mentions-line"),
 
-    html.H2("Sentiment Breakdown by Platform"),
+    html.H2("Sentiment Breakdown by Platform", style={"color": "#d71f26"}),
     dcc.Graph(id="sentiment-platform-bar"),
 
-    html.H2("Top Discussed Themes"),
+    html.H2("Top Discussed Themes", style={"color": "#d71f26"}),
     dcc.Graph(
         figure=px.bar(top_themes, x="Mentions", y="Theme", color="Sentiment", orientation="h",
+                     color_discrete_map={"Positive": "#d71f26", "Neutral": "#333333", "Negative": "#999999"},
                      title="Top Themes by Mentions")
     ),
 
-    html.H2("Top Social Quotes"),
+    html.H2("Top Social Quotes", style={"color": "#d71f26"}),
     html.Table([
         html.Thead([
-            html.Tr([html.Th(col) for col in top_quotes.columns])
+            html.Tr([html.Th(col, style={"backgroundColor": "#d71f26", "color": "white"}) for col in top_quotes.columns])
         ]),
         html.Tbody([
-            html.Tr([html.Td(top_quotes.iloc[i][col]) for col in top_quotes.columns])
-            for i in range(len(top_quotes))
+            html.Tr([
+                html.Td(top_quotes.iloc[i][col], style={"padding": "8px", "border": "1px solid #ccc"})
+                for col in top_quotes.columns
+            ]) for i in range(len(top_quotes))
         ])
-    ], style={"width": "80%", "margin": "auto", "border": "1px solid #ccc"})
-])
+    ], style={"width": "80%", "margin": "auto", "border": "1px solid #ccc", "borderCollapse": "collapse", "backgroundColor": "#fff"})
+], style={"backgroundColor": "#ffffff", "fontFamily": "Arial, sans-serif", "padding": "20px"})
 
 # --- Callbacks ---
 @app.callback(
@@ -93,13 +104,15 @@ def update_graphs(selected_months, selected_platforms):
     line = px.line(
         filtered.groupby(["Month", "Sentiment"]).sum(numeric_only=True).reset_index(),
         x="Month", y="Mentions", color="Sentiment",
-        markers=True
+        markers=True,
+        color_discrete_map={"Positive": "#d71f26", "Neutral": "#333333", "Negative": "#999999"}
     )
 
     # Sentiment by platform
     bar = px.bar(
         filtered.groupby(["Platform", "Sentiment"]).sum(numeric_only=True).reset_index(),
-        x="Platform", y="Mentions", color="Sentiment", barmode="group"
+        x="Platform", y="Mentions", color="Sentiment", barmode="group",
+        color_discrete_map={"Positive": "#d71f26", "Neutral": "#333333", "Negative": "#999999"}
     )
 
     return line, bar

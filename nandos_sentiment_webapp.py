@@ -7,35 +7,53 @@ import plotly.graph_objects as go
 app = dash.Dash(__name__)
 app.title = "Nando's SG Social Intelligence Dashboard"
 
-# --- Updated Data with Google Reviews ---
+# --- Fixed Length Data ---
 data = pd.DataFrame({
-    "Month": ["Feb", "Feb", "Feb", "Mar", "Mar", "Mar", "Apr", "Apr", "Apr", "May", "May", "May"] * 2 + ["May"] * 6,
-    "Platform": ["TikTok", "Instagram", "Reddit"] * 8 + ["Google Reviews"] * 6,
+    "Month": [
+        "Feb", "Feb", "Feb",
+        "Mar", "Mar", "Mar",
+        "Apr", "Apr", "Apr",
+        "May", "May", "May",
+        "Feb", "Feb", "Feb",
+        "Mar", "Mar", "Mar",
+        "Apr", "Apr", "Apr",
+        "May", "May", "May",
+        "May", "May", "May", "May", "May", "May"
+    ],
+    "Platform": [
+        "TikTok", "Instagram", "Reddit",
+        "TikTok", "Instagram", "Reddit",
+        "TikTok", "Instagram", "Reddit",
+        "TikTok", "Instagram", "Reddit",
+        "TikTok", "Instagram", "Reddit",
+        "TikTok", "Instagram", "Reddit",
+        "TikTok", "Instagram", "Reddit",
+        "Google Reviews", "Google Reviews", "Google Reviews",
+        "Google Reviews", "Google Reviews", "Google Reviews"
+    ],
     "Sentiment": [
-        "Positive", "Neutral", "Negative", "Positive", "Neutral", "Negative",
-        "Positive", "Neutral", "Negative", "Positive", "Neutral", "Negative",
+        "Positive", "Neutral", "Negative",
+        "Positive", "Neutral", "Negative",
+        "Positive", "Neutral", "Negative",
+        "Positive", "Neutral", "Negative",
+        "Positive", "Neutral", "Negative",
+        "Positive", "Neutral", "Negative",
+        "Positive", "Neutral", "Negative",
         "Positive", "Positive", "Negative", "Neutral", "Negative", "Positive"
     ],
     "Mentions": [
-        60, 30, 10, 80, 20, 15, 70, 25, 20, 90, 15, 10,
-        40, 50, 20, 50, 30, 10, 6, 6, 6, 6, 6, 6
+        60, 30, 10,
+        80, 20, 15,
+        70, 25, 20,
+        90, 15, 10,
+        40, 50, 20,
+        50, 30, 10,
+        6, 6, 6,
+        6, 6, 6
     ]
 })
 
-# Top themes (including Google Reviews)
-top_themes = pd.DataFrame({
-    "Theme": [
-        "Service issues", "Dry chicken", "Quick Lunch Meal Campaign",
-        "Spicy not spicy", "Pricing and value perception",
-        "Queue times", "Inconsistent portions", "Grill quality", "Staff attentiveness"
-    ],
-    "Mentions": [45, 30, 50, 25, 35, 20, 15, 18, 22],
-    "Sentiment": [
-        "Negative", "Negative", "Positive", "Neutral", "Negative",
-        "Neutral", "Negative", "Positive", "Positive"
-    ]
-})
-
+# Top social quotes (cleaned, aligned, and current)
 top_quotes = pd.DataFrame({
     "Platform": [
         "Instagram", "Facebook", "Google Reviews", "Reddit", "X (Twitter)"
@@ -52,6 +70,9 @@ top_quotes = pd.DataFrame({
     ],
     "Campaign": [
         "Quick Lunch Meal", "N/A", "N/A", "N/A", "People's Griller"
+    ],
+    "Theme": [
+        "Campaign Engagement", "Service Experience", "Service Experience", "Portion & Value", "Post-Meal Preference"
     ]
 })
 
@@ -87,13 +108,6 @@ app.layout = html.Div([
 
     html.H2("Sentiment Breakdown by Platform", style={"color": "#d71f26"}),
     dcc.Graph(id="sentiment-platform-bar"),
-
-    html.H2("Top Discussed Themes", style={"color": "#d71f26"}),
-    dcc.Graph(
-        figure=px.bar(top_themes, x="Mentions", y="Theme", color="Sentiment", orientation="h",
-                     color_discrete_map={"Positive": "#d71f26", "Neutral": "#333333", "Negative": "#999999"},
-                     title="Top Themes by Mentions")
-    ),
 
     html.H2("Top Social Quotes", style={"color": "#d71f26"}),
     html.Table([

@@ -60,15 +60,14 @@ top_quotes = pd.DataFrame({
         "Google Reviews", "Google Reviews", "Twitter", "Google Reviews"
     ],
     "Quote": [
-        "Friend-zone challenge was a great laugh during lunch!",
         "Wish the portions were bigger for the price we pay.",
+        "Some dishes are great but a $20 lunch needs to feel like $20."
         "The spice level is perfect but the meat can be dry sometimes.",
         "Chicken juicy but sour, not really smoky.",
         "Queued 10 min, card-only payment, good food though.",
         "The manager helped me retrieve something from the bin — amazing!",
         "The chicken is ever great. The team checked on us twice during meal.",
         "Nando’s is my go-to post gym meal. Reliable and tasty.",
-        "Some dishes are great but a $20 lunch needs to feel like $20."
     ],
     "Sentiment": [
         "Positive", "Negative", "Neutral", "Neutral", "Positive",
